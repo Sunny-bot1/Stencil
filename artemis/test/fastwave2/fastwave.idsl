@@ -1,0 +1,14 @@
+parameter L,M,N;
+iterator k, j, i;
+double ppgu[L,M,N], ppuv[L,M,N], ppgc[L,M,N], hhl[L,M,N];
+copyin ppgu, ppuv, ppgc, hhl;
+
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	gmem ppgu, ppuv, ppgc, hhl;
+
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) +
+                    (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i])); 
+}
+
+fastwave (ppgu, ppuv, ppgc, hhl);
+copyout ppgu;

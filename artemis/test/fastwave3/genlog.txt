@@ -1,0 +1,3942 @@
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 1
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:1)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*((int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	if (k >= k0 && k <= min(k0+blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+		ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 2
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:2)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(2*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 2
+	for (int r0_k2 = 0, k2 = k; r0_k2 < 2; r0_k2++, k2+=blockDim.z) {
+		if (k2 >= k0 && k2 <= min(k0+2*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k2][j][i] = (ppuv[k2][j+1][i] - ppuv[k2][j][i]) + (ppgc[k2][j+1][i] + ppgc[k2][j][i]) * 0.5 * ((hhl[k2+1][j][i] + hhl[k2][j][i]) - (hhl[k2+1][j+1][i] + hhl[k2][j+1][i])) / ((hhl[k2+1][j][i] - hhl[k2][j][i]) + (hhl[k2+1][j+1][i] + hhl[k2][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 4
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:4)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(4*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 4
+	for (int r0_k4 = 0, k4 = k; r0_k4 < 4; r0_k4++, k4+=blockDim.z) {
+		if (k4 >= k0 && k4 <= min(k0+4*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k4][j][i] = (ppuv[k4][j+1][i] - ppuv[k4][j][i]) + (ppgc[k4][j+1][i] + ppgc[k4][j][i]) * 0.5 * ((hhl[k4+1][j][i] + hhl[k4][j][i]) - (hhl[k4+1][j+1][i] + hhl[k4][j+1][i])) / ((hhl[k4+1][j][i] - hhl[k4][j][i]) + (hhl[k4+1][j+1][i] + hhl[k4][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 10
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:10)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(10*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 10
+	for (int r0_k10 = 0, k10 = k; r0_k10 < 10; r0_k10++, k10+=blockDim.z) {
+		if (k10 >= k0 && k10 <= min(k0+10*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k10][j][i] = (ppuv[k10][j+1][i] - ppuv[k10][j][i]) + (ppgc[k10][j+1][i] + ppgc[k10][j][i]) * 0.5 * ((hhl[k10+1][j][i] + hhl[k10][j][i]) - (hhl[k10+1][j+1][i] + hhl[k10][j+1][i])) / ((hhl[k10+1][j][i] - hhl[k10][j][i]) + (hhl[k10+1][j+1][i] + hhl[k10][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k40][j][i] = (ppuv[k40][j+1][i] - ppuv[k40][j][i]) + (ppgc[k40][j+1][i] + ppgc[k40][j][i]) * 0.5 * ((hhl[k40+1][j][i] + hhl[k40][j][i]) - (hhl[k40+1][j+1][i] + hhl[k40][j+1][i])) / ((hhl[k40+1][j][i] - hhl[k40][j][i]) + (hhl[k40+1][j+1][i] + hhl[k40][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 2
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:2, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(2*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 2
+		for (int r0_j2 = 0, j2 = j; r0_j2 < 2; r0_j2++, j2+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j2 >= j0 && j2 <= min(j0+2*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j2][i] = (ppuv[k40][j2+1][i] - ppuv[k40][j2][i]) + (ppgc[k40][j2+1][i] + ppgc[k40][j2][i]) * 0.5 * ((hhl[k40+1][j2][i] + hhl[k40][j2][i]) - (hhl[k40+1][j2+1][i] + hhl[k40][j2+1][i])) / ((hhl[k40+1][j2][i] - hhl[k40][j2][i]) + (hhl[k40+1][j2+1][i] + hhl[k40][j2+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 4
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:4, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(4*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 4
+		for (int r0_j4 = 0, j4 = j; r0_j4 < 4; r0_j4++, j4+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j4 >= j0 && j4 <= min(j0+4*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j4][i] = (ppuv[k40][j4+1][i] - ppuv[k40][j4][i]) + (ppgc[k40][j4+1][i] + ppgc[k40][j4][i]) * 0.5 * ((hhl[k40+1][j4][i] + hhl[k40][j4][i]) - (hhl[k40+1][j4+1][i] + hhl[k40][j4+1][i])) / ((hhl[k40+1][j4][i] - hhl[k40][j4][i]) + (hhl[k40+1][j4+1][i] + hhl[k40][j4+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 10
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:10, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(10*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 10
+		for (int r0_j10 = 0, j10 = j; r0_j10 < 10; r0_j10++, j10+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j10 >= j0 && j10 <= min(j0+10*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j10][i] = (ppuv[k40][j10+1][i] - ppuv[k40][j10][i]) + (ppgc[k40][j10+1][i] + ppgc[k40][j10][i]) * 0.5 * ((hhl[k40+1][j10][i] + hhl[k40][j10][i]) - (hhl[k40+1][j10+1][i] + hhl[k40][j10+1][i])) / ((hhl[k40+1][j10][i] - hhl[k40][j10][i]) + (hhl[k40+1][j10+1][i] + hhl[k40][j10+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 1
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:1)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*((int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	if (k >= k0 && k <= min(k0+blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+		ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 2
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:2)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(2*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 2
+	for (int r0_k2 = 0, k2 = k; r0_k2 < 2; r0_k2++, k2+=blockDim.z) {
+		if (k2 >= k0 && k2 <= min(k0+2*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k2][j][i] = (ppuv[k2][j+1][i] - ppuv[k2][j][i]) + (ppgc[k2][j+1][i] + ppgc[k2][j][i]) * 0.5 * ((hhl[k2+1][j][i] + hhl[k2][j][i]) - (hhl[k2+1][j+1][i] + hhl[k2][j+1][i])) / ((hhl[k2+1][j][i] - hhl[k2][j][i]) + (hhl[k2+1][j+1][i] + hhl[k2][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 4
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:4)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(4*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 4
+	for (int r0_k4 = 0, k4 = k; r0_k4 < 4; r0_k4++, k4+=blockDim.z) {
+		if (k4 >= k0 && k4 <= min(k0+4*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k4][j][i] = (ppuv[k4][j+1][i] - ppuv[k4][j][i]) + (ppgc[k4][j+1][i] + ppgc[k4][j][i]) * 0.5 * ((hhl[k4+1][j][i] + hhl[k4][j][i]) - (hhl[k4+1][j+1][i] + hhl[k4][j+1][i])) / ((hhl[k4+1][j][i] - hhl[k4][j][i]) + (hhl[k4+1][j+1][i] + hhl[k4][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 10
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:10)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(10*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 10
+	for (int r0_k10 = 0, k10 = k; r0_k10 < 10; r0_k10++, k10+=blockDim.z) {
+		if (k10 >= k0 && k10 <= min(k0+10*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k10][j][i] = (ppuv[k10][j+1][i] - ppuv[k10][j][i]) + (ppgc[k10][j+1][i] + ppgc[k10][j][i]) * 0.5 * ((hhl[k10+1][j][i] + hhl[k10][j][i]) - (hhl[k10+1][j+1][i] + hhl[k10][j+1][i])) / ((hhl[k10+1][j][i] - hhl[k10][j][i]) + (hhl[k10+1][j+1][i] + hhl[k10][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k40][j][i] = (ppuv[k40][j+1][i] - ppuv[k40][j][i]) + (ppgc[k40][j+1][i] + ppgc[k40][j][i]) * 0.5 * ((hhl[k40+1][j][i] + hhl[k40][j][i]) - (hhl[k40+1][j+1][i] + hhl[k40][j+1][i])) / ((hhl[k40+1][j][i] - hhl[k40][j][i]) + (hhl[k40+1][j+1][i] + hhl[k40][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 2
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:2, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(2*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 2
+		for (int r0_j2 = 0, j2 = j; r0_j2 < 2; r0_j2++, j2+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j2 >= j0 && j2 <= min(j0+2*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j2][i] = (ppuv[k40][j2+1][i] - ppuv[k40][j2][i]) + (ppgc[k40][j2+1][i] + ppgc[k40][j2][i]) * 0.5 * ((hhl[k40+1][j2][i] + hhl[k40][j2][i]) - (hhl[k40+1][j2+1][i] + hhl[k40][j2+1][i])) / ((hhl[k40+1][j2][i] - hhl[k40][j2][i]) + (hhl[k40+1][j2+1][i] + hhl[k40][j2+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 4
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:4, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(4*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 4
+		for (int r0_j4 = 0, j4 = j; r0_j4 < 4; r0_j4++, j4+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j4 >= j0 && j4 <= min(j0+4*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j4][i] = (ppuv[k40][j4+1][i] - ppuv[k40][j4][i]) + (ppgc[k40][j4+1][i] + ppgc[k40][j4][i]) * 0.5 * ((hhl[k40+1][j4][i] + hhl[k40][j4][i]) - (hhl[k40+1][j4+1][i] + hhl[k40][j4+1][i])) / ((hhl[k40+1][j4][i] - hhl[k40][j4][i]) + (hhl[k40+1][j4+1][i] + hhl[k40][j4+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 10
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:10, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(10*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 10
+		for (int r0_j10 = 0, j10 = j; r0_j10 < 10; r0_j10++, j10+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j10 >= j0 && j10 <= min(j0+10*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j10][i] = (ppuv[k40][j10+1][i] - ppuv[k40][j10][i]) + (ppgc[k40][j10+1][i] + ppgc[k40][j10][i]) * 0.5 * ((hhl[k40+1][j10][i] + hhl[k40][j10][i]) - (hhl[k40+1][j10+1][i] + hhl[k40][j10+1][i])) / ((hhl[k40+1][j10][i] - hhl[k40][j10][i]) + (hhl[k40+1][j10+1][i] + hhl[k40][j10+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 20
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:20, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(20*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 20
+		for (int r0_j20 = 0, j20 = j; r0_j20 < 20; r0_j20++, j20+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j20 >= j0 && j20 <= min(j0+20*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j20][i] = (ppuv[k40][j20+1][i] - ppuv[k40][j20][i]) + (ppgc[k40][j20+1][i] + ppgc[k40][j20][i]) * 0.5 * ((hhl[k40+1][j20][i] + hhl[k40][j20][i]) - (hhl[k40+1][j20+1][i] + hhl[k40][j20+1][i])) / ((hhl[k40+1][j20][i] - hhl[k40][j20][i]) + (hhl[k40+1][j20+1][i] + hhl[k40][j20+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 1
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:1)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*((int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	if (k >= k0 && k <= min(k0+blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+		ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 2
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:2)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(2*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 2
+	for (int r0_k2 = 0, k2 = k; r0_k2 < 2; r0_k2++, k2+=blockDim.z) {
+		if (k2 >= k0 && k2 <= min(k0+2*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k2][j][i] = (ppuv[k2][j+1][i] - ppuv[k2][j][i]) + (ppgc[k2][j+1][i] + ppgc[k2][j][i]) * 0.5 * ((hhl[k2+1][j][i] + hhl[k2][j][i]) - (hhl[k2+1][j+1][i] + hhl[k2][j+1][i])) / ((hhl[k2+1][j][i] - hhl[k2][j][i]) + (hhl[k2+1][j+1][i] + hhl[k2][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 4
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:4)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(4*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 4
+	for (int r0_k4 = 0, k4 = k; r0_k4 < 4; r0_k4++, k4+=blockDim.z) {
+		if (k4 >= k0 && k4 <= min(k0+4*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k4][j][i] = (ppuv[k4][j+1][i] - ppuv[k4][j][i]) + (ppgc[k4][j+1][i] + ppgc[k4][j][i]) * 0.5 * ((hhl[k4+1][j][i] + hhl[k4][j][i]) - (hhl[k4+1][j+1][i] + hhl[k4][j+1][i])) / ((hhl[k4+1][j][i] - hhl[k4][j][i]) + (hhl[k4+1][j+1][i] + hhl[k4][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 10
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:10)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(10*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 10
+	for (int r0_k10 = 0, k10 = k; r0_k10 < 10; r0_k10++, k10+=blockDim.z) {
+		if (k10 >= k0 && k10 <= min(k0+10*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k10][j][i] = (ppuv[k10][j+1][i] - ppuv[k10][j][i]) + (ppgc[k10][j+1][i] + ppgc[k10][j][i]) * 0.5 * ((hhl[k10+1][j][i] + hhl[k10][j][i]) - (hhl[k10+1][j+1][i] + hhl[k10][j+1][i])) / ((hhl[k10+1][j][i] - hhl[k10][j][i]) + (hhl[k10+1][j+1][i] + hhl[k10][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k40][j][i] = (ppuv[k40][j+1][i] - ppuv[k40][j][i]) + (ppgc[k40][j+1][i] + ppgc[k40][j][i]) * 0.5 * ((hhl[k40+1][j][i] + hhl[k40][j][i]) - (hhl[k40+1][j+1][i] + hhl[k40][j+1][i])) / ((hhl[k40+1][j][i] - hhl[k40][j][i]) + (hhl[k40+1][j+1][i] + hhl[k40][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 2
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:2, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(2*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 2
+		for (int r0_j2 = 0, j2 = j; r0_j2 < 2; r0_j2++, j2+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j2 >= j0 && j2 <= min(j0+2*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j2][i] = (ppuv[k40][j2+1][i] - ppuv[k40][j2][i]) + (ppgc[k40][j2+1][i] + ppgc[k40][j2][i]) * 0.5 * ((hhl[k40+1][j2][i] + hhl[k40][j2][i]) - (hhl[k40+1][j2+1][i] + hhl[k40][j2+1][i])) / ((hhl[k40+1][j2][i] - hhl[k40][j2][i]) + (hhl[k40+1][j2+1][i] + hhl[k40][j2+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 4
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:4, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(4*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 4
+		for (int r0_j4 = 0, j4 = j; r0_j4 < 4; r0_j4++, j4+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j4 >= j0 && j4 <= min(j0+4*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j4][i] = (ppuv[k40][j4+1][i] - ppuv[k40][j4][i]) + (ppgc[k40][j4+1][i] + ppgc[k40][j4][i]) * 0.5 * ((hhl[k40+1][j4][i] + hhl[k40][j4][i]) - (hhl[k40+1][j4+1][i] + hhl[k40][j4+1][i])) / ((hhl[k40+1][j4][i] - hhl[k40][j4][i]) + (hhl[k40+1][j4+1][i] + hhl[k40][j4+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 10
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:10, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(10*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 10
+		for (int r0_j10 = 0, j10 = j; r0_j10 < 10; r0_j10++, j10+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j10 >= j0 && j10 <= min(j0+10*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j10][i] = (ppuv[k40][j10+1][i] - ppuv[k40][j10][i]) + (ppgc[k40][j10+1][i] + ppgc[k40][j10][i]) * 0.5 * ((hhl[k40+1][j10][i] + hhl[k40][j10][i]) - (hhl[k40+1][j10+1][i] + hhl[k40][j10+1][i])) / ((hhl[k40+1][j10][i] - hhl[k40][j10][i]) + (hhl[k40+1][j10+1][i] + hhl[k40][j10+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 20
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:20, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(20*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 20
+		for (int r0_j20 = 0, j20 = j; r0_j20 < 20; r0_j20++, j20+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j20 >= j0 && j20 <= min(j0+20*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j20][i] = (ppuv[k40][j20+1][i] - ppuv[k40][j20][i]) + (ppgc[k40][j20+1][i] + ppgc[k40][j20][i]) * 0.5 * ((hhl[k40+1][j20][i] + hhl[k40][j20][i]) - (hhl[k40+1][j20+1][i] + hhl[k40][j20+1][i])) / ((hhl[k40+1][j20][i] - hhl[k40][j20][i]) + (hhl[k40+1][j20+1][i] + hhl[k40][j20+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k40][j][i] = (ppuv[k40][j+1][i] - ppuv[k40][j][i]) + (ppgc[k40][j+1][i] + ppgc[k40][j][i]) * 0.5 * ((hhl[k40+1][j][i] + hhl[k40][j][i]) - (hhl[k40+1][j+1][i] + hhl[k40][j+1][i])) / ((hhl[k40+1][j][i] - hhl[k40][j][i]) + (hhl[k40+1][j+1][i] + hhl[k40][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 2
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:2, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(2*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 2
+		for (int r0_j2 = 0, j2 = j; r0_j2 < 2; r0_j2++, j2+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j2 >= j0 && j2 <= min(j0+2*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j2][i] = (ppuv[k40][j2+1][i] - ppuv[k40][j2][i]) + (ppgc[k40][j2+1][i] + ppgc[k40][j2][i]) * 0.5 * ((hhl[k40+1][j2][i] + hhl[k40][j2][i]) - (hhl[k40+1][j2+1][i] + hhl[k40][j2+1][i])) / ((hhl[k40+1][j2][i] - hhl[k40][j2][i]) + (hhl[k40+1][j2+1][i] + hhl[k40][j2+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 4
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:4, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(4*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 4
+		for (int r0_j4 = 0, j4 = j; r0_j4 < 4; r0_j4++, j4+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j4 >= j0 && j4 <= min(j0+4*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j4][i] = (ppuv[k40][j4+1][i] - ppuv[k40][j4][i]) + (ppgc[k40][j4+1][i] + ppgc[k40][j4][i]) * 0.5 * ((hhl[k40+1][j4][i] + hhl[k40][j4][i]) - (hhl[k40+1][j4+1][i] + hhl[k40][j4+1][i])) / ((hhl[k40+1][j4][i] - hhl[k40][j4][i]) + (hhl[k40+1][j4+1][i] + hhl[k40][j4+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 8
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:8, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(8*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 8
+		for (int r0_j8 = 0, j8 = j; r0_j8 < 8; r0_j8++, j8+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j8 >= j0 && j8 <= min(j0+8*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j8][i] = (ppuv[k40][j8+1][i] - ppuv[k40][j8][i]) + (ppgc[k40][j8+1][i] + ppgc[k40][j8][i]) * 0.5 * ((hhl[k40+1][j8][i] + hhl[k40][j8][i]) - (hhl[k40+1][j8+1][i] + hhl[k40][j8+1][i])) / ((hhl[k40+1][j8][i] - hhl[k40][j8][i]) + (hhl[k40+1][j8+1][i] + hhl[k40][j8+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 16
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:16, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(16*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 16
+		for (int r0_j16 = 0, j16 = j; r0_j16 < 16; r0_j16++, j16+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j16 >= j0 && j16 <= min(j0+16*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j16][i] = (ppuv[k40][j16+1][i] - ppuv[k40][j16][i]) + (ppgc[k40][j16+1][i] + ppgc[k40][j16][i]) * 0.5 * ((hhl[k40+1][j16][i] + hhl[k40][j16][i]) - (hhl[k40+1][j16+1][i] + hhl[k40][j16+1][i])) / ((hhl[k40+1][j16][i] - hhl[k40][j16][i]) + (hhl[k40+1][j16+1][i] + hhl[k40][j16+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+block dim x = 16
+block dim y = 8
+block dim z = 8
+block dim x = 16
+block dim y = 8
+block dim z = 8
+block dim x = 16
+block dim y = 8
+block dim z = 8
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 5
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:5)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(5*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 5
+	for (int r0_k5 = 0, k5 = k; r0_k5 < 5; r0_k5++, k5+=blockDim.z) {
+		if (k5 >= k0 && k5 <= min(k0+5*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k5][j][i] = (ppuv[k5][j+1][i] - ppuv[k5][j][i]) + (ppgc[k5][j+1][i] + ppgc[k5][j][i]) * 0.5 * ((hhl[k5+1][j][i] + hhl[k5][j][i]) - (hhl[k5+1][j+1][i] + hhl[k5][j+1][i])) / ((hhl[k5+1][j][i] - hhl[k5][j][i]) + (hhl[k5+1][j+1][i] + hhl[k5][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 10
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:10)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(10*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 10
+	for (int r0_k10 = 0, k10 = k; r0_k10 < 10; r0_k10++, k10+=blockDim.z) {
+		if (k10 >= k0 && k10 <= min(k0+10*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k10][j][i] = (ppuv[k10][j+1][i] - ppuv[k10][j][i]) + (ppgc[k10][j+1][i] + ppgc[k10][j][i]) * 0.5 * ((hhl[k10+1][j][i] + hhl[k10][j][i]) - (hhl[k10+1][j+1][i] + hhl[k10][j+1][i])) / ((hhl[k10+1][j][i] - hhl[k10][j][i]) + (hhl[k10+1][j+1][i] + hhl[k10][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 20
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:20)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(20*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 20
+	for (int r0_k20 = 0, k20 = k; r0_k20 < 20; r0_k20++, k20+=blockDim.z) {
+		if (k20 >= k0 && k20 <= min(k0+20*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k20][j][i] = (ppuv[k20][j+1][i] - ppuv[k20][j][i]) + (ppgc[k20][j+1][i] + ppgc[k20][j][i]) * 0.5 * ((hhl[k20+1][j][i] + hhl[k20][j][i]) - (hhl[k20+1][j+1][i] + hhl[k20][j+1][i])) / ((hhl[k20+1][j][i] - hhl[k20][j][i]) + (hhl[k20+1][j+1][i] + hhl[k20][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 1
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:1, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*((int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+			ppgu[k40][j][i] = (ppuv[k40][j+1][i] - ppuv[k40][j][i]) + (ppgc[k40][j+1][i] + ppgc[k40][j][i]) * 0.5 * ((hhl[k40+1][j][i] + hhl[k40][j][i]) - (hhl[k40+1][j+1][i] + hhl[k40][j+1][i])) / ((hhl[k40+1][j][i] - hhl[k40][j][i]) + (hhl[k40+1][j+1][i] + hhl[k40][j+1][i]));
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 2
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:2, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(2*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 2
+		for (int r0_j2 = 0, j2 = j; r0_j2 < 2; r0_j2++, j2+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j2 >= j0 && j2 <= min(j0+2*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j2][i] = (ppuv[k40][j2+1][i] - ppuv[k40][j2][i]) + (ppgc[k40][j2+1][i] + ppgc[k40][j2][i]) * 0.5 * ((hhl[k40+1][j2][i] + hhl[k40][j2][i]) - (hhl[k40+1][j2+1][i] + hhl[k40][j2+1][i])) / ((hhl[k40+1][j2][i] - hhl[k40][j2][i]) + (hhl[k40+1][j2+1][i] + hhl[k40][j2+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 4
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:4, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(4*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 4
+		for (int r0_j4 = 0, j4 = j; r0_j4 < 4; r0_j4++, j4+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j4 >= j0 && j4 <= min(j0+4*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j4][i] = (ppuv[k40][j4+1][i] - ppuv[k40][j4][i]) + (ppgc[k40][j4+1][i] + ppgc[k40][j4][i]) * 0.5 * ((hhl[k40+1][j4][i] + hhl[k40][j4][i]) - (hhl[k40+1][j4+1][i] + hhl[k40][j4+1][i])) / ((hhl[k40+1][j4][i] - hhl[k40][j4][i]) + (hhl[k40+1][j4+1][i] + hhl[k40][j4+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+Unroll factor k = 40
+Unroll factor j = 8
+Unroll factor i = 1
+problem dim L = 320
+problem dim M = 320
+problem dim N = 320
+
+For stencil fastwave, dimensionality = 3
+
+parameter : (L, M, N)
+iterator : (k, j, i)
+unroll factor : (i:1, j:8, k:40)
+array decls : (double ppgu[0:L][0:M][0:N], double ppuv[0:L][0:M][0:N], double ppgc[0:L][0:M][0:N], double hhl[0:L][0:M][0:N])
+copy-in : (ppgu, ppuv, ppgc, hhl)
+stencil fastwave (ppgu, ppuv, ppgc, hhl) {
+	ppgu[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
+}
+[0:L - 1,0:M - 1,0:N - 1] : fastwave (ppgu, ppuv, ppgc, hhl);
+copy-out : (ppgu)
+
+
+Dependence graph for stencil fastwave : 
+
+Unified dependence graph for stencil fastwave : 
+Independent statements for stencil fastwave : 
+Clusters for stencil fastwave :
+
+Resource map for stencil fastwave :
+stmt 0 map:
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Amended resource map after fusion
+	hhl[0] = shared memory
+	ppgc[0] = shared memory
+	ppgu[0] = register
+	ppuv[0] = shared memory
+
+Original Access Stats
+	hhl[0] = 8 reads, 0 writes, 8192 bytes shmem
+	ppgc[0] = 2 reads, 0 writes, 8192 bytes shmem
+	ppgu[0] = 0 reads, 1 writes, 8192 bytes shmem
+	ppuv[0] = 2 reads, 0 writes, 8192 bytes shmem
+
+Amended resource map after removing trivial shared memory planes
+	hhl[0] = global memory
+	ppgc[0] = global memory
+	ppgu[0] = global memory
+	ppuv[0] = global memory
+
+Access Stats
+Shared memory size = 0, explicit registers = 0
+
+Arrays that are read after writes : 
+Amended resource map after removing arrays that were read first before writes
+
+For stencil fastwave :
+
+Pointwise occurrences are lhs of stmts 0 
+
+	hull for array ppgu : [0:L-2 ,0:M-2 ,0:N-1]
+	overall domain hull : [:L-2 ,:M-2 ,:N-1]
+	resource hull for array ppgu : [0:-1 ,0:-1 ,0:-1]
+	recompute hull : [0:-1 ,0:-1 ,0:-1]
+
+Printing the resource extent for stencil fastwave : 
+
+Pointwise occurrences are lhs of stmts 0 
+
+
+
+Printing stencil out : 
+
+__global__ void fastwave (double * __restrict__ d_ppgu, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
+	//Determining the block's indices
+	int i0 = (int)(blockIdx.x)*((int)blockDim.x);
+	int i = i0 + (int)(threadIdx.x);
+	int j0 = (int)(blockIdx.y)*(8*(int)blockDim.y);
+	int j = j0 + (int)(threadIdx.y);
+	int k0 = (int)(blockIdx.z)*(40*(int)blockDim.z);
+	int k = k0 + (int)(threadIdx.z);
+
+	double (*ppgu)[MM][NN] = (double (*)[MM][NN]) d_ppgu;
+	double (*ppuv)[MM][NN] = (double (*)[MM][NN]) d_ppuv;
+	double (*ppgc)[MM][NN] = (double (*)[MM][NN]) d_ppgc;
+	double (*hhl)[MM][NN] = (double (*)[MM][NN]) d_hhl;
+
+	//Array and variable declarations
+
+	#pragma unroll 40
+	for (int r0_k40 = 0, k40 = k; r0_k40 < 40; r0_k40++, k40+=blockDim.z) {
+		#pragma unroll 8
+		for (int r0_j8 = 0, j8 = j; r0_j8 < 8; r0_j8++, j8+=blockDim.y) {
+			if (k40 >= k0 && k40 <= min(k0+40*blockDim.z-1, L-2) && j8 >= j0 && j8 <= min(j0+8*blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+				ppgu[k40][j8][i] = (ppuv[k40][j8+1][i] - ppuv[k40][j8][i]) + (ppgc[k40][j8+1][i] + ppgc[k40][j8][i]) * 0.5 * ((hhl[k40+1][j8][i] + hhl[k40][j8][i]) - (hhl[k40+1][j8+1][i] + hhl[k40][j8+1][i])) / ((hhl[k40+1][j8][i] - hhl[k40][j8][i]) + (hhl[k40+1][j8+1][i] + hhl[k40][j8+1][i]));
+			}
+		}
+	}
+}
+
+block dim x = 16
+block dim y = 8
+block dim z = 8
+block dim x = 16
+block dim y = 8
+block dim z = 8

@@ -1,0 +1,384 @@
+--blockdim x=4,y=4,z=4 --unroll k=4,j=16,i=16: fastwave.idsl --blockdim x=4,y=4,z=4 --unroll k=4,j=16,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=4 --unroll k=8,j=8,i=16: fastwave.idsl --blockdim x=4,y=4,z=4 --unroll k=8,j=8,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=4 --unroll k=8,j=16,i=8: fastwave.idsl --blockdim x=4,y=4,z=4 --unroll k=8,j=16,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=4 --unroll k=16,j=4,i=16: fastwave.idsl --blockdim x=4,y=4,z=4 --unroll k=16,j=4,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=4 --unroll k=16,j=8,i=8: fastwave.idsl --blockdim x=4,y=4,z=4 --unroll k=16,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=4 --unroll k=16,j=16,i=4: fastwave.idsl --blockdim x=4,y=4,z=4 --unroll k=16,j=16,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=8 --unroll k=4,j=16,i=8: fastwave.idsl --blockdim x=4,y=4,z=8 --unroll k=4,j=16,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=8 --unroll k=8,j=8,i=8: fastwave.idsl --blockdim x=4,y=4,z=8 --unroll k=8,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=8 --unroll k=8,j=16,i=4: fastwave.idsl --blockdim x=4,y=4,z=8 --unroll k=8,j=16,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=8 --unroll k=16,j=4,i=8: fastwave.idsl --blockdim x=4,y=4,z=8 --unroll k=16,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=8 --unroll k=16,j=8,i=4: fastwave.idsl --blockdim x=4,y=4,z=8 --unroll k=16,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=8 --unroll k=16,j=16,i=2: fastwave.idsl --blockdim x=4,y=4,z=8 --unroll k=16,j=16,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=16 --unroll k=4,j=16,i=4: fastwave.idsl --blockdim x=4,y=4,z=16 --unroll k=4,j=16,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=16 --unroll k=8,j=8,i=4: fastwave.idsl --blockdim x=4,y=4,z=16 --unroll k=8,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=16 --unroll k=8,j=16,i=2: fastwave.idsl --blockdim x=4,y=4,z=16 --unroll k=8,j=16,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=16 --unroll k=16,j=4,i=4: fastwave.idsl --blockdim x=4,y=4,z=16 --unroll k=16,j=4,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=16 --unroll k=16,j=8,i=2: fastwave.idsl --blockdim x=4,y=4,z=16 --unroll k=16,j=8,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=16 --unroll k=16,j=16,i=1: fastwave.idsl --blockdim x=4,y=4,z=16 --unroll k=16,j=16,i=1 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=32 --unroll k=4,j=16,i=2: fastwave.idsl --blockdim x=4,y=4,z=32 --unroll k=4,j=16,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=32 --unroll k=8,j=8,i=2: fastwave.idsl --blockdim x=4,y=4,z=32 --unroll k=8,j=8,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=32 --unroll k=8,j=16,i=1: fastwave.idsl --blockdim x=4,y=4,z=32 --unroll k=8,j=16,i=1 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=32 --unroll k=16,j=4,i=2: fastwave.idsl --blockdim x=4,y=4,z=32 --unroll k=16,j=4,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=32 --unroll k=16,j=8,i=1: fastwave.idsl --blockdim x=4,y=4,z=32 --unroll k=16,j=8,i=1 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=64 --unroll k=4,j=16,i=1: fastwave.idsl --blockdim x=4,y=4,z=64 --unroll k=4,j=16,i=1 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=64 --unroll k=8,j=8,i=1: fastwave.idsl --blockdim x=4,y=4,z=64 --unroll k=8,j=8,i=1 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=4,z=64 --unroll k=16,j=4,i=1: fastwave.idsl --blockdim x=4,y=4,z=64 --unroll k=16,j=4,i=1 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=4 --unroll k=4,j=8,i=16: fastwave.idsl --blockdim x=4,y=8,z=4 --unroll k=4,j=8,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=4 --unroll k=8,j=4,i=16: fastwave.idsl --blockdim x=4,y=8,z=4 --unroll k=8,j=4,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=4 --unroll k=8,j=8,i=8: fastwave.idsl --blockdim x=4,y=8,z=4 --unroll k=8,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=4 --unroll k=16,j=2,i=16: fastwave.idsl --blockdim x=4,y=8,z=4 --unroll k=16,j=2,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=4 --unroll k=16,j=4,i=8: fastwave.idsl --blockdim x=4,y=8,z=4 --unroll k=16,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=4 --unroll k=16,j=8,i=4: fastwave.idsl --blockdim x=4,y=8,z=4 --unroll k=16,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=8 --unroll k=4,j=8,i=8: fastwave.idsl --blockdim x=4,y=8,z=8 --unroll k=4,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=8 --unroll k=8,j=4,i=8: fastwave.idsl --blockdim x=4,y=8,z=8 --unroll k=8,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=8 --unroll k=8,j=8,i=4: fastwave.idsl --blockdim x=4,y=8,z=8 --unroll k=8,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=8 --unroll k=16,j=2,i=8: fastwave.idsl --blockdim x=4,y=8,z=8 --unroll k=16,j=2,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=8 --unroll k=16,j=4,i=4: fastwave.idsl --blockdim x=4,y=8,z=8 --unroll k=16,j=4,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=8 --unroll k=16,j=8,i=2: fastwave.idsl --blockdim x=4,y=8,z=8 --unroll k=16,j=8,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=16 --unroll k=4,j=8,i=4: fastwave.idsl --blockdim x=4,y=8,z=16 --unroll k=4,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=16 --unroll k=8,j=4,i=4: fastwave.idsl --blockdim x=4,y=8,z=16 --unroll k=8,j=4,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=16 --unroll k=8,j=8,i=2: fastwave.idsl --blockdim x=4,y=8,z=16 --unroll k=8,j=8,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=16 --unroll k=16,j=2,i=4: fastwave.idsl --blockdim x=4,y=8,z=16 --unroll k=16,j=2,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=16 --unroll k=16,j=4,i=2: fastwave.idsl --blockdim x=4,y=8,z=16 --unroll k=16,j=4,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=16 --unroll k=16,j=8,i=1: fastwave.idsl --blockdim x=4,y=8,z=16 --unroll k=16,j=8,i=1 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=32 --unroll k=4,j=8,i=2: fastwave.idsl --blockdim x=4,y=8,z=32 --unroll k=4,j=8,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=32 --unroll k=8,j=4,i=2: fastwave.idsl --blockdim x=4,y=8,z=32 --unroll k=8,j=4,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=32 --unroll k=8,j=8,i=1: fastwave.idsl --blockdim x=4,y=8,z=32 --unroll k=8,j=8,i=1 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=32 --unroll k=16,j=2,i=2: fastwave.idsl --blockdim x=4,y=8,z=32 --unroll k=16,j=2,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=8,z=32 --unroll k=16,j=4,i=1: fastwave.idsl --blockdim x=4,y=8,z=32 --unroll k=16,j=4,i=1 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=4 --unroll k=4,j=4,i=16: fastwave.idsl --blockdim x=4,y=16,z=4 --unroll k=4,j=4,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=4 --unroll k=8,j=2,i=16: fastwave.idsl --blockdim x=4,y=16,z=4 --unroll k=8,j=2,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=4 --unroll k=8,j=4,i=8: fastwave.idsl --blockdim x=4,y=16,z=4 --unroll k=8,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=4 --unroll k=16,j=1,i=16: fastwave.idsl --blockdim x=4,y=16,z=4 --unroll k=16,j=1,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=4 --unroll k=16,j=2,i=8: fastwave.idsl --blockdim x=4,y=16,z=4 --unroll k=16,j=2,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=4 --unroll k=16,j=4,i=4: fastwave.idsl --blockdim x=4,y=16,z=4 --unroll k=16,j=4,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=8 --unroll k=4,j=4,i=8: fastwave.idsl --blockdim x=4,y=16,z=8 --unroll k=4,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=8 --unroll k=8,j=2,i=8: fastwave.idsl --blockdim x=4,y=16,z=8 --unroll k=8,j=2,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=8 --unroll k=8,j=4,i=4: fastwave.idsl --blockdim x=4,y=16,z=8 --unroll k=8,j=4,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=8 --unroll k=16,j=1,i=8: fastwave.idsl --blockdim x=4,y=16,z=8 --unroll k=16,j=1,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=8 --unroll k=16,j=2,i=4: fastwave.idsl --blockdim x=4,y=16,z=8 --unroll k=16,j=2,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=8 --unroll k=16,j=4,i=2: fastwave.idsl --blockdim x=4,y=16,z=8 --unroll k=16,j=4,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=16 --unroll k=4,j=4,i=4: fastwave.idsl --blockdim x=4,y=16,z=16 --unroll k=4,j=4,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=16 --unroll k=8,j=2,i=4: fastwave.idsl --blockdim x=4,y=16,z=16 --unroll k=8,j=2,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=16 --unroll k=8,j=4,i=2: fastwave.idsl --blockdim x=4,y=16,z=16 --unroll k=8,j=4,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=16 --unroll k=16,j=1,i=4: fastwave.idsl --blockdim x=4,y=16,z=16 --unroll k=16,j=1,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=16 --unroll k=16,j=2,i=2: fastwave.idsl --blockdim x=4,y=16,z=16 --unroll k=16,j=2,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=16,z=16 --unroll k=16,j=4,i=1: fastwave.idsl --blockdim x=4,y=16,z=16 --unroll k=16,j=4,i=1 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=32,z=4 --unroll k=4,j=2,i=16: fastwave.idsl --blockdim x=4,y=32,z=4 --unroll k=4,j=2,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=32,z=4 --unroll k=8,j=1,i=16: fastwave.idsl --blockdim x=4,y=32,z=4 --unroll k=8,j=1,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=32,z=4 --unroll k=8,j=2,i=8: fastwave.idsl --blockdim x=4,y=32,z=4 --unroll k=8,j=2,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=32,z=4 --unroll k=16,j=1,i=8: fastwave.idsl --blockdim x=4,y=32,z=4 --unroll k=16,j=1,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=32,z=4 --unroll k=16,j=2,i=4: fastwave.idsl --blockdim x=4,y=32,z=4 --unroll k=16,j=2,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=32,z=8 --unroll k=4,j=2,i=8: fastwave.idsl --blockdim x=4,y=32,z=8 --unroll k=4,j=2,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=32,z=8 --unroll k=8,j=1,i=8: fastwave.idsl --blockdim x=4,y=32,z=8 --unroll k=8,j=1,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=32,z=8 --unroll k=8,j=2,i=4: fastwave.idsl --blockdim x=4,y=32,z=8 --unroll k=8,j=2,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=32,z=8 --unroll k=16,j=1,i=4: fastwave.idsl --blockdim x=4,y=32,z=8 --unroll k=16,j=1,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=32,z=8 --unroll k=16,j=2,i=2: fastwave.idsl --blockdim x=4,y=32,z=8 --unroll k=16,j=2,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=64,z=4 --unroll k=4,j=1,i=16: fastwave.idsl --blockdim x=4,y=64,z=4 --unroll k=4,j=1,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=64,z=4 --unroll k=8,j=1,i=8: fastwave.idsl --blockdim x=4,y=64,z=4 --unroll k=8,j=1,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=4,y=64,z=4 --unroll k=16,j=1,i=4: fastwave.idsl --blockdim x=4,y=64,z=4 --unroll k=16,j=1,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=4 --unroll k=2,j=16,i=16: fastwave.idsl --blockdim x=8,y=4,z=4 --unroll k=2,j=16,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=4 --unroll k=4,j=8,i=16: fastwave.idsl --blockdim x=8,y=4,z=4 --unroll k=4,j=8,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=4 --unroll k=4,j=16,i=8: fastwave.idsl --blockdim x=8,y=4,z=4 --unroll k=4,j=16,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=4 --unroll k=8,j=4,i=16: fastwave.idsl --blockdim x=8,y=4,z=4 --unroll k=8,j=4,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=4 --unroll k=8,j=8,i=8: fastwave.idsl --blockdim x=8,y=4,z=4 --unroll k=8,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=4 --unroll k=8,j=16,i=4: fastwave.idsl --blockdim x=8,y=4,z=4 --unroll k=8,j=16,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=8 --unroll k=2,j=16,i=8: fastwave.idsl --blockdim x=8,y=4,z=8 --unroll k=2,j=16,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=8 --unroll k=4,j=8,i=8: fastwave.idsl --blockdim x=8,y=4,z=8 --unroll k=4,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=8 --unroll k=4,j=16,i=4: fastwave.idsl --blockdim x=8,y=4,z=8 --unroll k=4,j=16,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=8 --unroll k=8,j=4,i=8: fastwave.idsl --blockdim x=8,y=4,z=8 --unroll k=8,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=8 --unroll k=8,j=8,i=4: fastwave.idsl --blockdim x=8,y=4,z=8 --unroll k=8,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=8 --unroll k=8,j=16,i=2: fastwave.idsl --blockdim x=8,y=4,z=8 --unroll k=8,j=16,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=16 --unroll k=2,j=16,i=4: fastwave.idsl --blockdim x=8,y=4,z=16 --unroll k=2,j=16,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=16 --unroll k=4,j=8,i=4: fastwave.idsl --blockdim x=8,y=4,z=16 --unroll k=4,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=16 --unroll k=4,j=16,i=2: fastwave.idsl --blockdim x=8,y=4,z=16 --unroll k=4,j=16,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=16 --unroll k=8,j=4,i=4: fastwave.idsl --blockdim x=8,y=4,z=16 --unroll k=8,j=4,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=16 --unroll k=8,j=8,i=2: fastwave.idsl --blockdim x=8,y=4,z=16 --unroll k=8,j=8,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=16 --unroll k=8,j=16,i=1: fastwave.idsl --blockdim x=8,y=4,z=16 --unroll k=8,j=16,i=1 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=32 --unroll k=2,j=16,i=2: fastwave.idsl --blockdim x=8,y=4,z=32 --unroll k=2,j=16,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=32 --unroll k=4,j=8,i=2: fastwave.idsl --blockdim x=8,y=4,z=32 --unroll k=4,j=8,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=32 --unroll k=4,j=16,i=1: fastwave.idsl --blockdim x=8,y=4,z=32 --unroll k=4,j=16,i=1 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=32 --unroll k=8,j=4,i=2: fastwave.idsl --blockdim x=8,y=4,z=32 --unroll k=8,j=4,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=4,z=32 --unroll k=8,j=8,i=1: fastwave.idsl --blockdim x=8,y=4,z=32 --unroll k=8,j=8,i=1 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=4 --unroll k=2,j=8,i=16: fastwave.idsl --blockdim x=8,y=8,z=4 --unroll k=2,j=8,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=4 --unroll k=4,j=4,i=16: fastwave.idsl --blockdim x=8,y=8,z=4 --unroll k=4,j=4,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=4 --unroll k=4,j=8,i=8: fastwave.idsl --blockdim x=8,y=8,z=4 --unroll k=4,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=4 --unroll k=8,j=2,i=16: fastwave.idsl --blockdim x=8,y=8,z=4 --unroll k=8,j=2,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=4 --unroll k=8,j=4,i=8: fastwave.idsl --blockdim x=8,y=8,z=4 --unroll k=8,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=4 --unroll k=8,j=8,i=4: fastwave.idsl --blockdim x=8,y=8,z=4 --unroll k=8,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=8 --unroll k=2,j=8,i=8: fastwave.idsl --blockdim x=8,y=8,z=8 --unroll k=2,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=8 --unroll k=4,j=4,i=8: fastwave.idsl --blockdim x=8,y=8,z=8 --unroll k=4,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=8 --unroll k=4,j=8,i=4: fastwave.idsl --blockdim x=8,y=8,z=8 --unroll k=4,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=8 --unroll k=8,j=2,i=8: fastwave.idsl --blockdim x=8,y=8,z=8 --unroll k=8,j=2,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=8 --unroll k=8,j=4,i=4: fastwave.idsl --blockdim x=8,y=8,z=8 --unroll k=8,j=4,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=8 --unroll k=8,j=8,i=2: fastwave.idsl --blockdim x=8,y=8,z=8 --unroll k=8,j=8,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=16 --unroll k=2,j=8,i=4: fastwave.idsl --blockdim x=8,y=8,z=16 --unroll k=2,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=16 --unroll k=4,j=4,i=4: fastwave.idsl --blockdim x=8,y=8,z=16 --unroll k=4,j=4,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=16 --unroll k=4,j=8,i=2: fastwave.idsl --blockdim x=8,y=8,z=16 --unroll k=4,j=8,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=16 --unroll k=8,j=2,i=4: fastwave.idsl --blockdim x=8,y=8,z=16 --unroll k=8,j=2,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=16 --unroll k=8,j=4,i=2: fastwave.idsl --blockdim x=8,y=8,z=16 --unroll k=8,j=4,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=8,z=16 --unroll k=8,j=8,i=1: fastwave.idsl --blockdim x=8,y=8,z=16 --unroll k=8,j=8,i=1 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=16,z=4 --unroll k=2,j=4,i=16: fastwave.idsl --blockdim x=8,y=16,z=4 --unroll k=2,j=4,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=16,z=4 --unroll k=4,j=2,i=16: fastwave.idsl --blockdim x=8,y=16,z=4 --unroll k=4,j=2,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=16,z=4 --unroll k=4,j=4,i=8: fastwave.idsl --blockdim x=8,y=16,z=4 --unroll k=4,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=16,z=4 --unroll k=8,j=1,i=16: fastwave.idsl --blockdim x=8,y=16,z=4 --unroll k=8,j=1,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=16,z=4 --unroll k=8,j=2,i=8: fastwave.idsl --blockdim x=8,y=16,z=4 --unroll k=8,j=2,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=16,z=4 --unroll k=8,j=4,i=4: fastwave.idsl --blockdim x=8,y=16,z=4 --unroll k=8,j=4,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=16,z=8 --unroll k=2,j=4,i=8: fastwave.idsl --blockdim x=8,y=16,z=8 --unroll k=2,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=16,z=8 --unroll k=4,j=2,i=8: fastwave.idsl --blockdim x=8,y=16,z=8 --unroll k=4,j=2,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=16,z=8 --unroll k=4,j=4,i=4: fastwave.idsl --blockdim x=8,y=16,z=8 --unroll k=4,j=4,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=16,z=8 --unroll k=8,j=1,i=8: fastwave.idsl --blockdim x=8,y=16,z=8 --unroll k=8,j=1,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=16,z=8 --unroll k=8,j=2,i=4: fastwave.idsl --blockdim x=8,y=16,z=8 --unroll k=8,j=2,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=16,z=8 --unroll k=8,j=4,i=2: fastwave.idsl --blockdim x=8,y=16,z=8 --unroll k=8,j=4,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=32,z=4 --unroll k=2,j=2,i=16: fastwave.idsl --blockdim x=8,y=32,z=4 --unroll k=2,j=2,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=32,z=4 --unroll k=4,j=1,i=16: fastwave.idsl --blockdim x=8,y=32,z=4 --unroll k=4,j=1,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=32,z=4 --unroll k=4,j=2,i=8: fastwave.idsl --blockdim x=8,y=32,z=4 --unroll k=4,j=2,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=32,z=4 --unroll k=8,j=1,i=8: fastwave.idsl --blockdim x=8,y=32,z=4 --unroll k=8,j=1,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=8,y=32,z=4 --unroll k=8,j=2,i=4: fastwave.idsl --blockdim x=8,y=32,z=4 --unroll k=8,j=2,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=4 --unroll k=1,j=16,i=16: fastwave.idsl --blockdim x=16,y=4,z=4 --unroll k=1,j=16,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=4 --unroll k=2,j=8,i=16: fastwave.idsl --blockdim x=16,y=4,z=4 --unroll k=2,j=8,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=4 --unroll k=2,j=16,i=8: fastwave.idsl --blockdim x=16,y=4,z=4 --unroll k=2,j=16,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=4 --unroll k=4,j=4,i=16: fastwave.idsl --blockdim x=16,y=4,z=4 --unroll k=4,j=4,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=4 --unroll k=4,j=8,i=8: fastwave.idsl --blockdim x=16,y=4,z=4 --unroll k=4,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=4 --unroll k=4,j=16,i=4: fastwave.idsl --blockdim x=16,y=4,z=4 --unroll k=4,j=16,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=8 --unroll k=1,j=16,i=8: fastwave.idsl --blockdim x=16,y=4,z=8 --unroll k=1,j=16,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=8 --unroll k=2,j=8,i=8: fastwave.idsl --blockdim x=16,y=4,z=8 --unroll k=2,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=8 --unroll k=2,j=16,i=4: fastwave.idsl --blockdim x=16,y=4,z=8 --unroll k=2,j=16,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=8 --unroll k=4,j=4,i=8: fastwave.idsl --blockdim x=16,y=4,z=8 --unroll k=4,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=8 --unroll k=4,j=8,i=4: fastwave.idsl --blockdim x=16,y=4,z=8 --unroll k=4,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=8 --unroll k=4,j=16,i=2: fastwave.idsl --blockdim x=16,y=4,z=8 --unroll k=4,j=16,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=16 --unroll k=1,j=16,i=4: fastwave.idsl --blockdim x=16,y=4,z=16 --unroll k=1,j=16,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=16 --unroll k=2,j=8,i=4: fastwave.idsl --blockdim x=16,y=4,z=16 --unroll k=2,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=16 --unroll k=2,j=16,i=2: fastwave.idsl --blockdim x=16,y=4,z=16 --unroll k=2,j=16,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=16 --unroll k=4,j=4,i=4: fastwave.idsl --blockdim x=16,y=4,z=16 --unroll k=4,j=4,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=16 --unroll k=4,j=8,i=2: fastwave.idsl --blockdim x=16,y=4,z=16 --unroll k=4,j=8,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=4,z=16 --unroll k=4,j=16,i=1: fastwave.idsl --blockdim x=16,y=4,z=16 --unroll k=4,j=16,i=1 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=8,z=4 --unroll k=1,j=8,i=16: fastwave.idsl --blockdim x=16,y=8,z=4 --unroll k=1,j=8,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=8,z=4 --unroll k=2,j=4,i=16: fastwave.idsl --blockdim x=16,y=8,z=4 --unroll k=2,j=4,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=8,z=4 --unroll k=2,j=8,i=8: fastwave.idsl --blockdim x=16,y=8,z=4 --unroll k=2,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=8,z=4 --unroll k=4,j=2,i=16: fastwave.idsl --blockdim x=16,y=8,z=4 --unroll k=4,j=2,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=8,z=4 --unroll k=4,j=4,i=8: fastwave.idsl --blockdim x=16,y=8,z=4 --unroll k=4,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=8,z=4 --unroll k=4,j=8,i=4: fastwave.idsl --blockdim x=16,y=8,z=4 --unroll k=4,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=8,z=8 --unroll k=1,j=8,i=8: fastwave.idsl --blockdim x=16,y=8,z=8 --unroll k=1,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=8,z=8 --unroll k=2,j=4,i=8: fastwave.idsl --blockdim x=16,y=8,z=8 --unroll k=2,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=8,z=8 --unroll k=2,j=8,i=4: fastwave.idsl --blockdim x=16,y=8,z=8 --unroll k=2,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=8,z=8 --unroll k=4,j=2,i=8: fastwave.idsl --blockdim x=16,y=8,z=8 --unroll k=4,j=2,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=8,z=8 --unroll k=4,j=4,i=4: fastwave.idsl --blockdim x=16,y=8,z=8 --unroll k=4,j=4,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=8,z=8 --unroll k=4,j=8,i=2: fastwave.idsl --blockdim x=16,y=8,z=8 --unroll k=4,j=8,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=16,z=4 --unroll k=1,j=4,i=16: fastwave.idsl --blockdim x=16,y=16,z=4 --unroll k=1,j=4,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=16,z=4 --unroll k=2,j=2,i=16: fastwave.idsl --blockdim x=16,y=16,z=4 --unroll k=2,j=2,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=16,z=4 --unroll k=2,j=4,i=8: fastwave.idsl --blockdim x=16,y=16,z=4 --unroll k=2,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=16,z=4 --unroll k=4,j=1,i=16: fastwave.idsl --blockdim x=16,y=16,z=4 --unroll k=4,j=1,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=16,z=4 --unroll k=4,j=2,i=8: fastwave.idsl --blockdim x=16,y=16,z=4 --unroll k=4,j=2,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=16,z=4 --unroll k=4,j=4,i=4: fastwave.idsl --blockdim x=16,y=16,z=4 --unroll k=4,j=4,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=32,y=4,z=4 --unroll k=1,j=8,i=16: fastwave.idsl --blockdim x=32,y=4,z=4 --unroll k=1,j=8,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=32,y=4,z=4 --unroll k=1,j=16,i=8: fastwave.idsl --blockdim x=32,y=4,z=4 --unroll k=1,j=16,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=32,y=4,z=4 --unroll k=2,j=4,i=16: fastwave.idsl --blockdim x=32,y=4,z=4 --unroll k=2,j=4,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=32,y=4,z=4 --unroll k=2,j=8,i=8: fastwave.idsl --blockdim x=32,y=4,z=4 --unroll k=2,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=32,y=4,z=4 --unroll k=2,j=16,i=4: fastwave.idsl --blockdim x=32,y=4,z=4 --unroll k=2,j=16,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=32,y=4,z=8 --unroll k=1,j=8,i=8: fastwave.idsl --blockdim x=32,y=4,z=8 --unroll k=1,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=32,y=4,z=8 --unroll k=1,j=16,i=4: fastwave.idsl --blockdim x=32,y=4,z=8 --unroll k=1,j=16,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=32,y=4,z=8 --unroll k=2,j=4,i=8: fastwave.idsl --blockdim x=32,y=4,z=8 --unroll k=2,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=32,y=4,z=8 --unroll k=2,j=8,i=4: fastwave.idsl --blockdim x=32,y=4,z=8 --unroll k=2,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=32,y=4,z=8 --unroll k=2,j=16,i=2: fastwave.idsl --blockdim x=32,y=4,z=8 --unroll k=2,j=16,i=2 --ndim L=320,M=320,N=320
+
+--blockdim x=32,y=8,z=4 --unroll k=1,j=4,i=16: fastwave.idsl --blockdim x=32,y=8,z=4 --unroll k=1,j=4,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=32,y=8,z=4 --unroll k=1,j=8,i=8: fastwave.idsl --blockdim x=32,y=8,z=4 --unroll k=1,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=32,y=8,z=4 --unroll k=2,j=2,i=16: fastwave.idsl --blockdim x=32,y=8,z=4 --unroll k=2,j=2,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=32,y=8,z=4 --unroll k=2,j=4,i=8: fastwave.idsl --blockdim x=32,y=8,z=4 --unroll k=2,j=4,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=32,y=8,z=4 --unroll k=2,j=8,i=4: fastwave.idsl --blockdim x=32,y=8,z=4 --unroll k=2,j=8,i=4 --ndim L=320,M=320,N=320
+
+--blockdim x=64,y=4,z=4 --unroll k=1,j=4,i=16: fastwave.idsl --blockdim x=64,y=4,z=4 --unroll k=1,j=4,i=16 --ndim L=320,M=320,N=320
+
+--blockdim x=64,y=4,z=4 --unroll k=1,j=8,i=8: fastwave.idsl --blockdim x=64,y=4,z=4 --unroll k=1,j=8,i=8 --ndim L=320,M=320,N=320
+
+--blockdim x=64,y=4,z=4 --unroll k=1,j=16,i=4: fastwave.idsl --blockdim x=64,y=4,z=4 --unroll k=1,j=16,i=4 --ndim L=320,M=320,N=320
+

@@ -1,0 +1,8 @@
+--blockdim x=16,y=16 --unroll k=1,j=1,i=1 --full-stream k: sw4.idsl --blockdim x=16,y=16 --unroll k=1,j=1,i=1 --full-stream k --no-shmem --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=16 --unroll k=1,j=1,i=2 --full-stream k: sw4.idsl --blockdim x=16,y=16 --unroll k=1,j=1,i=2 --full-stream k --no-shmem --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=16 --unroll k=1,j=2,i=1 --full-stream k: sw4.idsl --blockdim x=16,y=16 --unroll k=1,j=2,i=1 --full-stream k --no-shmem --ndim L=320,M=320,N=320
+
+--blockdim x=16,y=16 --unroll k=1,j=2,i=2 --full-stream k: sw4.idsl --blockdim x=16,y=16 --unroll k=1,j=2,i=2 --full-stream k --no-shmem --ndim L=320,M=320,N=320
+
