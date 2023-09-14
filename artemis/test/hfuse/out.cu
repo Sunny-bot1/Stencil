@@ -95,7 +95,7 @@ extern "C" void host_code (double *h_ppgu0, double *h_ppgu1, double *h_ppuv, dou
 	check_error ("Failed to allocate device memory for hhl\n");
 	cudaMemcpy (hhl, h_hhl, sizeof(double )*(L - 0)*(M - 0)*(N - 0), cudaMemcpyHostToDevice);
 
-	dim3 blockconfig_1 (bx, by, bz);
+	dim3 blockconfig_1 (bx, by, bz); 
 	dim3 gridconfig_1 (ceil (N, min(bx1, bx-bx1)), ceil (M, blockconfig_1.y), ceil (L, blockconfig_1.z));
 
 	cudaEventRecord(start);
