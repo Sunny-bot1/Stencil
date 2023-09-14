@@ -12,7 +12,7 @@
 #define by 8
 #define bz 8
 
-#define bx1 14
+#define bx1 8
 
 void check_error (const char* message) {
 	cudaError_t error = cudaGetLastError ();
@@ -23,7 +23,7 @@ void check_error (const char* message) {
 }
 
 __global__ void fusion (double * __restrict__ d_ppgu0, double * __restrict__ d_ppgu1, double * __restrict__ d_ppuv, double * __restrict__ d_ppgc, double * __restrict__ d_hhl, int L, int M, int N) {
-	int tid = threadIdx.x + threadIdx.y * blockDim.x + threadIdx.z * blockDim.x * blockDim.y;
+	//int tid = threadIdx.x + threadIdx.y * blockDim.x + threadIdx.z * blockDim.x * blockDim.y;
 	int tid_x1 = threadIdx.x;
 	int tid_x2 = threadIdx.x - bx1;
 	int bdim_x1 = bx1;
@@ -50,9 +50,10 @@ __global__ void fusion (double * __restrict__ d_ppgu0, double * __restrict__ d_p
 		int j = j0 + (int)(threadIdx.y);
 		int k0 = (int)(blockIdx.z)*((int)blockDim.z);
 		int k = k0 + (int)(threadIdx.z);
-		if (k >= k0 && k <= min(k0+blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-1) && i >= i0 && i <= min(i0+blockDim.x-1, N-2)) {
+		if (k >= k0 && k <= min(k0+blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-1) && i >= i0 && i <= min(i0+bdim_x1-1, N-2)) {
 			ppgu0[k][j][i] = (ppuv[k][j][i+1] - ppuv[k][j][i]) + (ppgc[k][j][i+1] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j][i+1] + hhl[k][j][i+1])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j][i+1] + hhl[k][j][i+1]));
 		}
+		return;
 	}
 	else{
 		int i0 = (int)(blockIdx.x)*bdim_x2;
@@ -61,10 +62,7 @@ __global__ void fusion (double * __restrict__ d_ppgu0, double * __restrict__ d_p
 		int j = j0 + (int)(threadIdx.y);
 		int k0 = (int)(blockIdx.z)*((int)blockDim.z);
 		int k = k0 + (int)(threadIdx.z);
-		// if (k >= k0 && k <= min(k0+blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
-		// 	ppgu1[k][j][i] = (ppuv[k][j][i+1] - ppuv[k][j][i]) + (ppgc[k][j][i+1] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j][i+1] + hhl[k][j][i+1])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j][i+1] + hhl[k][j][i+1]));
-		// }
-		if (k >= k0 && k <= min(k0+blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+blockDim.x-1, N-1)) {
+		if (k >= k0 && k <= min(k0+blockDim.z-1, L-2) && j >= j0 && j <= min(j0+blockDim.y-1, M-2) && i >= i0 && i <= min(i0+bdim_x2-1, N-1)) {
 			ppgu1[k][j][i] = (ppuv[k][j+1][i] - ppuv[k][j][i]) + (ppgc[k][j+1][i] + ppgc[k][j][i]) * 0.5 * ((hhl[k+1][j][i] + hhl[k][j][i]) - (hhl[k+1][j+1][i] + hhl[k][j+1][i])) / ((hhl[k+1][j][i] - hhl[k][j][i]) + (hhl[k+1][j+1][i] + hhl[k][j+1][i]));
 		}
 	}
@@ -97,8 +95,8 @@ extern "C" void host_code (double *h_ppgu0, double *h_ppgu1, double *h_ppuv, dou
 	check_error ("Failed to allocate device memory for hhl\n");
 	cudaMemcpy (hhl, h_hhl, sizeof(double )*(L - 0)*(M - 0)*(N - 0), cudaMemcpyHostToDevice);
 
-	dim3 blockconfig_1 (min(bx1, bx-bx1), by, bz);
-	dim3 gridconfig_1 (ceil (N, blockconfig_1.x), ceil (M, blockconfig_1.y), ceil (L, blockconfig_1.z));
+	dim3 blockconfig_1 (bx, by, bz);
+	dim3 gridconfig_1 (ceil (N, min(bx1, bx-bx1)), ceil (M, blockconfig_1.y), ceil (L, blockconfig_1.z));
 
 	cudaEventRecord(start);
 	fusion <<<gridconfig_1, blockconfig_1>>> (ppgu0, ppgu1, ppuv, ppgc, hhl, L, M, N);
