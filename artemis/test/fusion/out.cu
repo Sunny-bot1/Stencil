@@ -4,9 +4,9 @@
 #define min(x,y)    ((x) < (y) ? (x) : (y))
 #define ceil(a,b)   ((a) % (b) == 0 ? (a) / (b) : ((a) / (b)) + 1)
 
-#define LL 128
-#define MM 128
-#define NN 128
+#define LL 64
+#define MM 64
+#define NN 64
 
 #define bx 16
 #define by 8

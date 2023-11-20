@@ -7,9 +7,9 @@ OPTFLAGS=-maxrregcount=$(MAXREGCOUNT) -ccbin=g++ -std=c++11 -Xcompiler "-fPIC -f
 endif
 .DEFAULT_GOAL := fusion
 gold:
-	nvcc fusion.cpp out.cu -arch=$(ARCH) $(OPTFLAGS)
+	nvcc fusion.cpp out.cu -arch=$(ARCH) $(OPTFLAGS) -lineinfo
 	./a.out
 clean:
 	rm test.txt gold.txt
 fusion:
-	nvcc fusion.cpp out.cu -arch=$(ARCH) $(OPTFLAGS)
+	nvcc fusion.cpp out.cu -arch=$(ARCH) $(OPTFLAGS) -lineinfo

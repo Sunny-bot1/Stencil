@@ -6,14 +6,14 @@
 extern "C" void host_code (double*, double*, double*, double*, int, int, int);
 
 int main(int argc, char** argv) {
-	int N = 320; 
+	int N = 64; 
 
-	double (*ppgu)[320][320] = (double (*)[320][320]) getRandom3DArray<double>(320, 320, 320);
-	double (*ppuv)[320][320] = (double (*)[320][320]) getRandom3DArray<double>(320, 320, 320);
-	double (*ppgc)[320][320] = (double (*)[320][320]) getRandom3DArray<double>(320, 320, 320);
-	double (*hhl)[320][320] = (double (*)[320][320]) getRandom3DArray<double>(320, 320, 320);
+	double (*ppgu)[64][64] = (double (*)[64][64]) getRandom3DArray<double>(64, 64, 64);
+	double (*ppuv)[64][64] = (double (*)[64][64]) getRandom3DArray<double>(64, 64, 64);
+	double (*ppgc)[64][64] = (double (*)[64][64]) getRandom3DArray<double>(64, 64, 64);
+	double (*hhl)[64][64] = (double (*)[64][64]) getRandom3DArray<double>(64, 64, 64);
 	
-    double (*ppgu_gold)[320][320] = (double (*)[320][320]) getRandom3DArray<double>(320, 320, 320);
+    double (*ppgu_gold)[64][64] = (double (*)[64][64]) getRandom3DArray<double>(64, 64, 64);
     memcpy(ppgu, ppgu_gold, sizeof(double)*N*N*N);
 	fastwave ((double*)ppgu_gold, (double*)ppuv, (double*)ppgc, (double*)hhl, N);
 	host_code ((double*)ppgu, (double*)ppuv, (double*)ppgc, (double*)hhl, N, N, N);

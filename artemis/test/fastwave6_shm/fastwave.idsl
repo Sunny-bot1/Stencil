@@ -1,0 +1,12 @@
+parameter L,M,N;
+iterator k, j, i;
+double ppgc[L,M,N], ppgk[L,M,N];
+copyin ppgc, ppgk;
+
+stencil fastwave (ppgc, ppgk) {
+	gmem ppgc, ppgk;
+	ppgc[k][j][i] = ppgk[k+1][j][i] - ppgk[k][j][i];
+}
+
+fastwave (ppgc, ppgk);
+copyout ppgc;

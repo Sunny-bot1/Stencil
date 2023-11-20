@@ -1,0 +1,13 @@
+parameter L,M,N;
+iterator k, j, i;
+double ppgk[L,M,N], wgtfac[L,M,N], ppuv[L,M,N];
+copyin ppgk, wgtfac, ppuv;
+
+stencil fastwave (ppgk, wgtfac, ppuv) {
+	gmem ppgk, wgtfac, ppuv;
+	ppgk[k][j][i] = wgtfac[k][j][i] * ppuv[k][j][i] +
+                        (1.0 - wgtfac[k][j][i]) * ppuv[k - 1][j][i];
+}
+
+fastwave (ppgk, wgtfac, ppuv);
+copyout ppgk;

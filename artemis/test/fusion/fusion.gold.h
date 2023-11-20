@@ -1,9 +1,9 @@
 extern "C" void fusion (double *ppgu_in0, double *ppgu_in1, double *ppuv_in, double *ppgc_in, double *hhl_in, int N) {
-	double (*ppgu0)[128][128] = (double (*)[128][128])ppgu_in0;
-	double (*ppgu1)[128][128] = (double (*)[128][128])ppgu_in1;
-	double (*ppuv)[128][128] = (double (*)[128][128])ppuv_in;
-	double (*ppgc)[128][128] = (double (*)[128][128])ppgc_in;
-	double (*hhl)[128][128] = (double (*)[128][128])hhl_in;
+	double (*ppgu0)[64][64] = (double (*)[64][64])ppgu_in0;
+	double (*ppgu1)[64][64] = (double (*)[64][64])ppgu_in1;
+	double (*ppuv)[64][64] = (double (*)[64][64])ppuv_in;
+	double (*ppgc)[64][64] = (double (*)[64][64])ppgc_in;
+	double (*hhl)[64][64] = (double (*)[64][64])hhl_in;
 
 	int i,j, k;
 	for (k = 0; k < N-1; k++) {
